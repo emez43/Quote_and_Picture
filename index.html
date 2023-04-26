@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote & Picture</title>
+    <style>
+        
+        * {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        img {
+            height: 100vh;
+            width: 100vw;
+
+        }
+
+        #count {
+            position: absolute;
+            color: white;
+            padding: 1%;
+            background-color: rgba(110, 100, 100, 0.774);
+            border-radius: 10px;
+            font-size: 20px;
+        }
+
+
+
+        /* button */
+        .button-55 {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            text-shadow: 1px 1px 1px white;
+
+            align-self: center;
+            background-color: #ffffff38;
+            background-image: none;
+            background-position: 0 90%;
+            background-repeat: repeat no-repeat;
+            background-size: 4px 3px;
+            border-radius: 15px 225px 255px 15px 15px 255px 225px 15px;
+            border-style: solid;
+            border-width: 2px;
+            box-shadow: rgba(0, 0, 0, .2) 15px 28px 25px -18px;
+            box-sizing: border-box;
+            color: #41403e;
+            cursor: pointer;
+            display: inline-block;
+            font-family: Neucha, sans-serif;
+            font-size: 1rem;
+            line-height: 23px;
+            outline: none;
+            padding: .75rem;
+            text-decoration: none;
+            transition: all 235ms ease-in-out;
+            border-bottom-left-radius: 15px 255px;
+            border-bottom-right-radius: 225px 15px;
+            border-top-left-radius: 255px 15px;
+            border-top-right-radius: 15px 225px;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+        .button-55:hover {
+            box-shadow: rgba(0, 0, 0, .3) 2px 8px 8px -5px;
+            transform: translate3d(0, 2px, 0);
+        }
+
+        .button-55:focus {
+            box-shadow: rgba(0, 0, 0, .3) 2px 8px 4px -6px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="count">
+        <div id="name"></div>
+        <div id="content"></div>
+    </div>
+    <button class="button-55" role="button">Refresh</button>
+
+    <img id="pic" src="" alt="pic">
+
+
+
+
+
+
+</body>
+
+<script>
+    let divcontent = document.getElementById('content')
+    let divname = document.getElementById('name')
+    let divpic = document.getElementById('pic')
+    let btn = document.querySelector('.button-55')
+
+    let randomNum = Math.floor(Math.random() * 11)
+    console.log(randomNum)
+
+
+
+
+    btn.addEventListener('click', refreshPage)
+
+    function refreshPage() {
+
+        // kép API
+
+        fetch('https://picsum.photos/v2/list?page=' + randomNum + '&limit=100')
+            .then(result => result.json())
+            .then((data) => {
+                let randomUrl = Math.floor(Math.random() * data.length)
+
+                console.log(data[randomUrl].download_url)
+                divpic.src = data[randomUrl].download_url
+            })
+        
+        // idézet API
+        fetch('http://api.quotable.io/random')
+            .then((result) => result.json())
+            .then((data) => {
+                divcontent.textContent = ''
+                let name = data.author
+                divname.textContent = name + ':'
+                let content = data.content
+                divcontent.textContent = content
+            })
+            .catch(error => console.log(error))
+
+        // random elhelyezés
+        let randomTop = Math.ceil(Math.random()*74)
+        let randomLeft = Math.ceil(Math.random()*50)
+        document.getElementById('count').style.left= randomLeft+'vw'
+        document.getElementById('count').style.top = randomTop+'vh'
+    }
+
+    refreshPage()
+
+
+</script>
+
+</html>
